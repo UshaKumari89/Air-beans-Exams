@@ -28,7 +28,7 @@ router.post('/signup', (req, res) => {
         res.status(409).json({
           // If user already exists, return an error message
           error:
-            "Looks like this username is already taken! Try being more original, dude!! ",
+            "user name already exist!!! ",
         });
       } else {
         // If the username is unique, proceed with hashing the password and inserting the admin
