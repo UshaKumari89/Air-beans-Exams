@@ -60,38 +60,39 @@ router.post('/signup', (req, res) => {
   
 // Login logic
 
+
 router.post('/login', (req, res) => {
-    const { username, password } = req.body;
-  
-    // Find the user in the DB by their username
-    db.findOne({ username: username }, (err, user) => {
-      if (err) {
-        console.error('Error occurred while querying the user:', err);
-        return res.status(500).json({ error: 'Internal server error' });
-      }
-    if (!user) {
-        res.status(401).json({
-          error: 'Invalid username or user does not exist. Try again.',
-        });
-    } else {
-        bcrypt.compare(password, user.password, (err, result) => {
-            if (result) {
-              const payload = {
-                user: {
-                  username: user.username,
-                  role: user.role,
-                },
-              };
-    
-              const token = jwt.sign(payload, "key", { expiresIn: "1h" });
-    
-              res.status(200).json({ token });
-            } else {
-              res.status(401).json({ error: "Wrong password, buddy boy!" });
-            }
-          });
+  const { username, password } = req.body;
+
+  // Find the user in the DB by their username
+  db.findOne({ username: username }, (err, user) => {
+    if (err) {
+      console.error('Error occurred while querying the user:', err);
+      return res.status(500).json({ error: 'Internal server error' });
     }
-     })
+  if (!user) {
+      res.status(401).json({
+        error: 'Invalid username or user does not exist. Try again.',
+      });
+  } else {
+      bcrypt.compare(password, user.password, (err, result) => {
+          if (result) {
+            const payload = {
+              user: {
+                username: user.username,
+                role: user.role,
+              },
+            };
+  
+           // const token = jwt.sign(payload, "key", { expiresIn: "1h" });
+          const token = createToken(payload);
+            res.status(200).json({ token });
+          } else {
+            res.status(401).json({ error: "Wrong password, buddy boy!" });
+          }
+        });
+  }
+   })
 
 })
 
