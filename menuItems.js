@@ -7,33 +7,38 @@ const { authenticateToken } = require('./authentication'); // Import your authen
 const menuDB = new Datastore({ filename: './menuDatabase.db', autoload: true });
 
 // Define a callback function for handling the POST request 
-  router.post('/add', authenticateToken, (req, res) => {
-  // console.log('POST /add route handler called');
+router.post('/add', authenticateToken, (req, res) => {
+  const menuItems = req.body;
   
-  // Extract menu item details from req.body
-  const menuItem = {
-    name: req.body.name,
-    price: req.body.price,
-    description: req.body.description,
-    createdAt: DateTime.now().setZone('Europe/Stockholm').toISO(), // Set timestamp to Stockholm time
-    // Add any other menu item properties here
-  };
-  // console.log('Received menu item:', menuItem);
-
-// Insert the menu item into the database
- // Inside your POST /add route handler
-menuDB.insert(menuItem, (err, newMenuItem) => {
-  if (err) {
-    console.error('Error adding menu item:', err);
-    res.status(500).json({ error: 'Error adding menu item' });
+  const results = [];
+  const errors = [];
+  
+  menuItems.forEach((item) => {
+    const menuItem = {
+      id:item.id,
+      title:item.title,
+      desc: item.desc,
+      price: item.price,
+      createdAt: DateTime.now().setZone('Europe/Stockholm').toISO(),
+    };
+    
+    menuDB.insert(menuItem, (err, newMenuItem) => {
+      if (err) {
+        console.error('Error adding menu item:', err);
+        errors.push(err);
+      } else {
+        console.log('Menu item added successfully:', newMenuItem);
+        results.push(newMenuItem);
+      }
+    });
+  });
+  
+  if (errors.length > 0) {
+    res.status(500).json({ error: 'Error adding some menu items', errors });
   } else {
-    console.log('Menu item added successfully:', newMenuItem);
-    res.status(200).json({ message: 'Menu item added successfully!', newMenuItem });
+    res.status(200).json({ message: 'Menu items added successfully!', results });
   }
 });
-
-});
-
 //update a menuitem
 // Define a callback function for handling the PUT request to modify a product by id
 router.put('/modify/:id', authenticateToken, (req, res) => {
@@ -41,9 +46,10 @@ router.put('/modify/:id', authenticateToken, (req, res) => {
 
   // Extract the updated product details from req.body
   const updatedProduct = {
-    name: req.body.name,
+    id:req.body.id,
+    title: req.body.title,
+    desc: req.body.desc,
     price: req.body.price,
-    description: req.body.description,
     modifiedAt: DateTime.now().setZone('Europe/Stockholm').toISO(),
   };
   console.log('Updating product with ID:', productId, 'to:', updatedProduct);
@@ -64,6 +70,25 @@ router.put('/modify/:id', authenticateToken, (req, res) => {
   });
 });
 
+
+//delete router from databse
+router.delete('/remove/:id', authenticateToken, (req, res) => {
+  const productId = req.params.id; // Get the product id from the URL parameter
+
+  // Use menuDB.remove to delete the product by id
+  menuDB.remove({ _id: productId }, {}, (err, numRemoved) => {
+    if (err) {
+      console.error('Error removing product:', err);
+      res.status(500).json({ error: 'Error removing product' });
+    } else if (numRemoved === 0) {
+      // If no product was removed, it means the product with that id does not exist
+      res.status(404).json({ error: 'Product not found' });
+    } else {
+      // Product successfully removed
+      res.status(200).json({ message: 'Product removed successfully' });
+    }
+  });
+});
 
 
 

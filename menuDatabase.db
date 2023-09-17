@@ -1,2 +1,7 @@
-{"name":"Black Coffee","price":"12sek","description":"Strong black coffee","createdAt":"2023-09-17T22:48:33.324+02:00","_id":"xeCzsQS2WU2xG4c8"}
-{"name":"Black-Coffee","price":"120sek","description":"Strong-black coffee","createdAt":"2023-09-17T22:48:33.324+02:00","_id":"xeCzsQS2WU2xG4c8","modifiedAt":"2023-09-17T23:05:20.997+02:00"}
+{"id":"coffee-vxig26my4y","title":"Bryggkaffe","desc":"Bryggd på månadens bönor.","price":39,"createdAt":"2023-09-17T23:33:07.483+02:00","_id":"0NsdNQfJxP1CHwEi"}
+{"id":"coffee-0lp6ter3bh","title":"Kaffe Latte","desc":"Bryggd på månadens bönor.","price":54,"createdAt":"2023-09-17T23:33:07.507+02:00","_id":"4zZLuxZepIPGj7GF"}
+{"id":"coffee-4pdksmrkfa","title":"Cappuccino","desc":"Bryggd på månadens bönor.","price":49,"createdAt":"2023-09-17T23:33:07.507+02:00","_id":"7jKvav0EfouT0Oz3"}
+{"id":"pastry-db3gfsuqpr","title":"Gustav Adolfsbakelse","desc":"En kunglig bakelse.","price":50,"createdAt":"2023-09-17T23:33:07.507+02:00","_id":"HKNsDCnCT36xrwsH"}
+{"id":"coffee-220dodpzmg","title":"Caffè Doppio","desc":"Bryggd på månadens bönor.","price":49,"createdAt":"2023-09-17T23:33:07.506+02:00","_id":"PI3ahTjfwl6SKDnz"}
+{"id":"coffee-e8hz0lk7q5","title":"Cortado","desc":"Bryggd på månadens bönor.","price":39,"createdAt":"2023-09-17T23:33:07.507+02:00","_id":"UyTWu1yXyKngTyPl"}
+{"id":"coffee-m2h37k2mnh","title":"Latte Macchiato","desc":"Bryggd på månadens bönor.","price":49,"createdAt":"2023-09-17T23:33:07.507+02:00","_id":"W1aFEUUmblzLcuzF"}
