@@ -3,11 +3,11 @@ const router = express.Router();
 const app = express();
 const Datastore = require('nedb');
 const bcrypt = require('bcryptjs');
-const { createToken } = require('./authentication');
+const { createToken } = require('./auth');
 const jwt = require("jsonwebtoken");
 
 
-const db = new Datastore({ filename: './database.db', autoload: true })
+const db = new Datastore({ filename: './users.db', autoload: true })
 
 // Signup logic
 router.post('/signup', (req, res) => {
@@ -59,8 +59,6 @@ router.post('/signup', (req, res) => {
   });
   
 // Login logic
-
-
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -70,30 +68,36 @@ router.post('/login', (req, res) => {
       console.error('Error occurred while querying the user:', err);
       return res.status(500).json({ error: 'Internal server error' });
     }
-  if (!user) {
-      res.status(401).json({
+    if (!user) {
+      return res.status(401).json({
         error: 'Invalid username or user does not exist. Try again.',
       });
-  } else {
-      bcrypt.compare(password, user.password, (err, result) => {
-          if (result) {
-            const payload = {
-              user: {
-                username: user.username,
-                role: user.role,
-              },
-            };
-  
-           // const token = jwt.sign(payload, "key", { expiresIn: "1h" });
-          const token = createToken(payload);
-            res.status(200).json({ token });
-          } else {
-            res.status(401).json({ error: "Wrong password, buddy boy!" });
-          }
-        });
-  }
-   })
+    }
 
-})
+    // Compare the provided password with the hashed password in the database
+   // Compare the provided password with the hashed password in the database
+bcrypt.compare(password, user.password, (err, result) => {
+  if (result) {
+    // User's password is correct; create the token for any user
+    const payload = {
+      user: {
+        username: user.username,
+        role: user.role,
+      },
+    };
+    const token = createToken(payload);
+    
+    // Now check their role
+    if (user.role === 'admin') {
+      res.status(200).json({ token });
+    } else {
+      res.status(200).json({ token, message: 'Logged in, but user is not an admin.' });
+    }
+  } else {
+    res.status(401).json({ error: 'Wrong password, buddy boy!' });
+  }
+});
+  });
+});
 
 module.exports = router;

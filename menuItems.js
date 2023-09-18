@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Datastore = require('nedb');
 const { DateTime } = require('luxon'); // Import luxon
-const { authenticateToken } = require('./authentication'); // Import your authentication middleware if needed
+const { authenticateToken, checkAdminRole  } = require('./auth'); // Import your authentication middleware if needed
 
 const menuDB = new Datastore({ filename: './menuDatabase.db', autoload: true });
 
+
+
 // Define a callback function for handling the POST request 
-router.post('/add', authenticateToken, (req, res) => {
+router.post('/add', authenticateToken,checkAdminRole, (req, res) => {
   const menuItems = req.body;
   
   const results = [];
@@ -27,7 +29,7 @@ router.post('/add', authenticateToken, (req, res) => {
         console.error('Error adding menu item:', err);
         errors.push(err);
       } else {
-        console.log('Menu item added successfully:', newMenuItem);
+        // console.log('Menu item added successfully:', newMenuItem);
         results.push(newMenuItem);
       }
     });
@@ -39,12 +41,13 @@ router.post('/add', authenticateToken, (req, res) => {
     res.status(200).json({ message: 'Menu items added successfully!', results });
   }
 });
+
+
 //update a menuitem
 // Define a callback function for handling the PUT request to modify a product by id
-router.put('/modify/:id', authenticateToken, (req, res) => {
+ router.put('/modify/:id', authenticateToken, checkAdminRole, (req, res) => {
   const productId = req.params.id; // Get the product id from the URL parameter
-
-  // Extract the updated product details from req.body
+// Extract the updated product details from req.body
   const updatedProduct = {
     id:req.body.id,
     title: req.body.title,
@@ -72,7 +75,7 @@ router.put('/modify/:id', authenticateToken, (req, res) => {
 
 
 //delete router from databse
-router.delete('/remove/:id', authenticateToken, (req, res) => {
+router.delete('/delete/:id', authenticateToken, checkAdminRole, (req, res) => {
   const productId = req.params.id; // Get the product id from the URL parameter
 
   // Use menuDB.remove to delete the product by id
