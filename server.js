@@ -1,7 +1,7 @@
 const express = require('express');
-const adminRoutes = require('./adminRoute');
-const menuRoutes = require('./menuItems');
-const userRoutes = require('./usersRoute');
+const adminRoutes = require('./router/adminRoute');
+const menuRoutes = require('./router/menuItems');
+const userRoutes = require('./router/usersRoute');
 //const { testToken } = require('./authentication');
 
 const app = express();

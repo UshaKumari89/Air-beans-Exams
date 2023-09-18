@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Datastore = require('nedb');
 const { DateTime } = require('luxon'); // Import luxon
-const { authenticateToken, checkAdminRole  } = require('./auth'); // Import your authentication middleware if needed
+const { authenticateToken, checkAdminRole  } = require('../middlewire/auth'); // Import your authentication middleware if needed
 
 const menuDB = new Datastore({ filename: './databse/menu.db', autoload: true });
 

@@ -3,7 +3,7 @@ const router = express.Router();
 const app = express();
 const Datastore = require('nedb');
 const bcrypt = require('bcryptjs');
-const { createToken } = require('./auth');
+const { createToken } = require('../middlewire/auth');
 const jwt = require("jsonwebtoken");
 
 
