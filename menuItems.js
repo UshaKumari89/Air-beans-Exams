@@ -4,7 +4,7 @@ const Datastore = require('nedb');
 const { DateTime } = require('luxon'); // Import luxon
 const { authenticateToken, checkAdminRole  } = require('./auth'); // Import your authentication middleware if needed
 
-const menuDB = new Datastore({ filename: './menuDatabase.db', autoload: true });
+const menuDB = new Datastore({ filename: './databse/menu.db', autoload: true });
 
 
 
@@ -67,7 +67,7 @@ router.post('/add', authenticateToken,checkAdminRole, (req, res) => {
       res.status(404).json({ error: 'Product not found' });
     } else {
       // Product successfully modified
-      console.log('Product modified successfully:', productId);
+      //console.log('Product modified successfully:', productId);
       res.status(200).json({ message: 'Product modified successfully' });
     }
   });

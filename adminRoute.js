@@ -7,9 +7,8 @@ const { createToken } = require('./auth');
 const jwt = require("jsonwebtoken");
 
 
-const db = new Datastore({ filename: './users.db', autoload: true })
-
-// Signup logic
+const db = new Datastore({ filename: './databse/admin.db', autoload: true });
+// Signup logic for admin users
 router.post('/signup', (req, res) => {
     // Get admin details from req.body
     let admin = {
@@ -24,15 +23,12 @@ router.post('/signup', (req, res) => {
         // Handle error
         res.status(500).json({ error: 'Internal server error' });
       } else if (adminExist) {
-        // The admin already exists! Send an error response
         res.status(409).json({
-          // If user already exists, return an error message
           error:
             "user name already exist!!! ",
         });
       } else {
-        // If the username is unique, proceed with hashing the password and inserting the admin
-        bcrypt.hash(admin.password, 10, (err, hashedPassword) => {
+         bcrypt.hash(admin.password, 10, (err, hashedPassword) => {
           if (err) {
             res.status(500).json({ error: 'Internal server error' });
           } else {
@@ -57,8 +53,46 @@ router.post('/signup', (req, res) => {
       }
     });
   });
-  
+
 // Login logic
+// router.post('/login', (req, res) => {
+//   const { username, password } = req.body;
+
+//   // Find the user in the DB by their username
+//   db.findOne({ username: username }, (err, user) => {
+//     if (err) {
+//       console.error('Error occurred while querying the user:', err);
+//       return res.status(500).json({ error: 'Internal server error' });
+//     }
+//     if (!user) {
+//       return res.status(401).json({
+//         error: 'Invalid username.... Try again.',
+//       });
+//     }
+//    // Compare the provided password with the hashed password in the database
+// bcrypt.compare(password, user.password, (err, result) => {
+//   if (result) {
+//     // User's password is correct; create the token for any user
+//     const payload = {
+//       user: {
+//         username: user.username,
+//         role: user.role,
+//       },
+//     };
+//     const token = createToken(payload);
+    
+//     // Now check their role
+//     if (user.role === 'admin') {
+//       res.status(200).json({ token });
+//     } else {
+//       res.status(200).json({ token, message: 'Logged in, you are not a admin.' });
+//     }
+//   } else {
+//     res.status(401).json({ error: 'Wrong password, try again!' });
+//   }
+// });
+//   });
+// });
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -70,33 +104,28 @@ router.post('/login', (req, res) => {
     }
     if (!user) {
       return res.status(401).json({
-        error: 'Invalid username or user does not exist. Try again.',
+        error: 'Invalid username or password. Try again.',
       });
     }
-
-    // Compare the provided password with the hashed password in the database
-   // Compare the provided password with the hashed password in the database
-bcrypt.compare(password, user.password, (err, result) => {
-  if (result) {
-    // User's password is correct; create the token for any user
-    const payload = {
-      user: {
-        username: user.username,
-        role: user.role,
-      },
-    };
-    const token = createToken(payload);
     
-    // Now check their role
-    if (user.role === 'admin') {
-      res.status(200).json({ token });
-    } else {
-      res.status(200).json({ token, message: 'Logged in, but user is not an admin.' });
-    }
-  } else {
-    res.status(401).json({ error: 'Wrong password, buddy boy!' });
-  }
-});
+    // Compare the provided password with the hashed password in the database
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) {
+        // User's password is correct; create the token for the user
+        const payload = {
+          user: {
+            username: user.username,
+            role: user.role,
+          },
+        };
+        const token = createToken(payload);
+        
+        // Respond with the token
+        res.status(200).json({ token });
+      } else {
+        res.status(401).json({ error: 'Wrong password, try again!' });
+      }
+    });
   });
 });
 
