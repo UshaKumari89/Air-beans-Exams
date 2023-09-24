@@ -1,0 +1,30 @@
+In the individual part of Airbean, you are required to create an admin interface for managing the menu. You should be able to add and remove products.
+
+### Functional Requirements
+
+* Ability to add a new product to the menu. You should only be able to send the properties that exist on a product (`id`, `title`, `desc`, `price`) in the request body. All properties should be included. It should also include a `createdAt` with the date and time when it was created.
+
+* Ability to modify a product, and if a product is modified, a property (`modifiedAt`) should be added with the date and time.
+
+* Ability to remove a product. It should only be possible to remove a product that exists.
+
+* If the above requirements are not met, an appropriate error message should be sent back.
+* All three endpoints should be protected, meaning the user logging in should have a role called `admin` (which is stored in the database) and should be checked using middleware. 
+
+You can manually add the user to the database, but there should also be an endpoint for logging in. Creating an account is not a requirement.
+
+* The menu should be stored in a NeDB database.
+
+
+* There should be an endpoint to add promotional offers that will be saved in the database according to the following model:
+   - Which products are included (e.g., brewed coffee and Gustavus Adolphus pastry, and it should be validated that these products exist).
+   - Promotional price for this combination (e.g., 40 SEK in total).
+ 
+**For Pass (Godkänt):**
+* Achieves all functional requirements.
+
+**For Pass with Distinction (Väl Godkänt):**
+* Uses JSON web tokens to return a token containing the user's role, which is then used to control access to the routes as mentioned above.
+* Uses Bcrypt.js to encrypt passwords when creating an account. It is beneficial to add functionality for creating an account.
+
+This is a set of instructions for creating an admin interface for managing a menu and implementing other related functionalities in the Airbean API. It involves user authentication, data validation, and database management.
